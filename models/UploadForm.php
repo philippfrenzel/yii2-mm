@@ -7,9 +7,13 @@ use yii\helpers\FileHelper;
 
 class UploadForm extends \yii\base\Model
 {
-
+	/**
+    * @var string basepath the root path which will be used to enter the uploaded files
+    */
+    public $basepath;
+  
     /**
-     * @var string
+     * @var string path which is currently used within the mm navigation
      */
     public $path;
 
@@ -30,7 +34,7 @@ class UploadForm extends \yii\base\Model
             [
                 ['file'], 'file',
                 'skipOnEmpty' => false,
-                'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'bmp'],
+                'extensions' => ['png', 'jpg', 'jpeg', 'gif', 'bmp','pdf','doc','xls','docx','xlsx'],
                 'mimeTypes' => ['image/*'],
                 'maxSize' => 2000000, //2097152,
                 'maxFiles' => 1,
@@ -69,11 +73,11 @@ class UploadForm extends \yii\base\Model
         if ($this->validate()) {
             $file = $this->file;
             $fs = Yii::$app->getModule('mm')->fs;
-            $path = "{$this->path}/{$file->baseName}.{$file->extension}";
+            $path = "{$this->basepath}/{$this->path}/{$file->baseName}.{$file->extension}";
 
             $counter = 1;
             while ($fs->has($path)) {
-                $path = "{$this->path}/{$file->baseName}_{$counter}.{$file->extension}";
+                $path = "{$this->basepath}/{$this->path}/{$file->baseName}_{$counter}.{$file->extension}";
                 $counter++;
             }
 
